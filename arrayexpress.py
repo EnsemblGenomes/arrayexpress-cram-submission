@@ -93,5 +93,8 @@ def get_ena_analysis_id(submission_id: str) -> str:
         raise ArrayexpressException("couldn't find analysis id for submission id " + submission_id)
     else:
         tree = ElementTree.fromstring(r.text)
-        analysis_id = tree.find("SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/XREF_LINK[DB='ENA-ANALYSIS']/ID").text
+        id_element = tree.find("SUBMISSION/SUBMISSION_LINKS/SUBMISSION_LINK/XREF_LINK[DB='ENA-ANALYSIS']/ID")
+        if not id_element:
+            raise ArrayexpressException("couldn't find analysis xref id element in XML document")
+        analysis_id = id_element.text
         return analysis_id
