@@ -1,5 +1,10 @@
 language: python
 python:
-   - 3.5
-install: pip install -r requirements.txt
-script: nosetests -v --with-coverage --cover-package=ena --cover-package=arrayexpress --cover-package=pipeline
+  - 3.5
+install:
+  - pip install -r requirements.txt
+  - pip install coveralls
+script:
+  nosetests -v --with-coverage --cover-package=ena --cover-package=arrayexpress --cover-package=pipeline
+after_success:
+  coveralls
