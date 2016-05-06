@@ -38,4 +38,13 @@ Every step from discovering CRAM files, over collecting metadata, to submitting 
 
 This makes it easy to deal with failures that inevitably will happen when e.g. some of 30k+ long running tasks that have
 dependencies between each other will fail. Instead of cleaning up after failed tasks, resetting state, or being forced to
- start again from scratch we can rely on luigi to check the completion of (atomic) tasks and safely resume.
+ start again from scratch we can rely on luigi to check the completion of (atomic) tasks and resume safely.
+
+Programmatic submission to the European Nucleotide Archive requires the creation of 'submission' and 'analysis' XML documents, following the [provided schemas](http://www.ebi.ac.uk/ena/submit/read-xml-format-1-5).
+These documents are created with the help of [generateDS](http://www.davekuhlman.org/generateDS.html), which generates an API to match the schemas. The generated code is in `ena/schema`.
+
+Should the schemas change, a new version of the API can be generated with
+```bash
+generateDS.py -o "SRA_analysis.py" -s "SRA_analysis_sub.py" SRA.analysis.xsd
+generateDS.py -o "SRA_submission.py" -s "SRA_submission_sub.py" SRA.submission.xsd
+```
