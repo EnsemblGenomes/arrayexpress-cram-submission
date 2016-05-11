@@ -8,11 +8,18 @@ A python 3 pipeline for submitting [CRAM](http://www.ebi.ac.uk/ena/software/cram
 ## Installation
 Get a copy of the project and install python dependencies with `pip install -r requirements.txt`
 
+## Setup
+Start the [central scheduler](http://luigi.readthedocs.io/en/stable/central_scheduler.html)
+```bash
+luigid
+```
+and visit it on port 8082, e.g. <http://localhost:8082>. Then run a pipeline and follow the progress in your browser.
+
 ## Submitting all CRAM files for a species
 ```bash
 export ena_user=webin-xxx
 export ena_password=xxxxxxxx
-luigi --module pipeline SubmitSpecies --species oryza_sativa --local-scheduler
+luigi --module pipeline SubmitSpecies --species oryza_sativa 
 ```
  This will
  1. make a request to [getRunsByOrganism](http://www.ebi.ac.uk/fg/rnaseq/api/json/70/getRunsByOrganism/oryza_sativa) on the ArrayExpress API to fetch a list of all Oryza sativa CRAM files which have been marked as 'Complete'
@@ -20,12 +27,15 @@ luigi --module pipeline SubmitSpecies --species oryza_sativa --local-scheduler
  3. collect metadata required for the submission
  4. create 'submission' and 'analysis' XML documents required for [programmatic submission](http://www.ebi.ac.uk/ena/submit/programmatic-submission) to the ENA and submit them
  5. store the resulting submission and analysis accessions in an SQLite database
+ 
+### Testing
+Add `--test --limit 3` to the luigi command to sumit to the ENA test server (results are not publicly visible) and sumit only 3 CRAM files instead of all.
 
 ## Submitting CRAM files for all plant species
 ```bash
 export ena_user=webin-xxx
 export ena_password=xxxxxxxx
-luigi --module pipeline SubmitAllSpecies --local-scheduler
+luigi --module pipeline SubmitAllSpecies
 ```
 This will make a request to [getOrganisms](http://www.ebi.ac.uk/fg/rnaseq/api/json/70/getOrganisms/plants) on the ArrayExpress API to fetch a list of all plant species, and run SubmitSpecies (described above) for each.
 
