@@ -11,7 +11,7 @@ def _raise_exception(name: str):
 
 
 _config = configparser.ConfigParser()
-_config.read(os.path.join(os.path.dirname(__file__), '..', 'urls.cfg'))
+_config.read(os.path.join(os.path.dirname(__file__), 'urls.cfg'))
 
 test_server = _config['ENA submission']['test']
 if not test_server:
@@ -26,3 +26,7 @@ if not ftp_server:
     _raise_exception('ENA ftp/host')
 
 sqlite = _config['result DB']['sqlite']
+
+arrayexpress = _config['ArrayExpress']['api']
+if not arrayexpress:
+    _raise_exception('ArrayExpress/api')

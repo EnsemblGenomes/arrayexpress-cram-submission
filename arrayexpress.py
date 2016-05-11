@@ -1,10 +1,10 @@
-import os
 import urllib
-from collections import namedtuple
-from typing import List, Set
+from typing import List
 from xml.etree import ElementTree
 
 import requests
+
+import urls
 
 
 class Cram:
@@ -28,14 +28,14 @@ def cram_ftp_to_nfs_path(ftp_location):
 
 
 def get_cram_species() -> List[str]:
-    r = requests.get('http://www.ebi.ac.uk/fg/rnaseq/api/json/70/getOrganisms/plants')
+    r = requests.get(urls.arrayexpress + '/getOrganisms/plants')
     species_set = set(group['REFERENCE_ORGANISM'] for group in r.json())
     species = sorted(species_set)
     return species
 
 
 def get_cram_metadata(species: str) -> List[Cram]:
-    r = requests.get('http://www.ebi.ac.uk/fg/rnaseq/api/json/70/getRunsByOrganism/' + species)
+    r = requests.get(urls.arrayexpress + '/getRunsByOrganism/' + species)
     meta_list = []
     for group in r.json():
         if group['STATUS'] == 'Complete':
