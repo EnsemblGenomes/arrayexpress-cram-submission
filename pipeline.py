@@ -95,7 +95,8 @@ class StoreEnaSubmissionResult(sqla.CopyToTable):
         (['analysis_acc', String(128)], {})
     ]
     table = 'EnaSubmissionResult'
-    connection_string = 'sqlite://'
+    sqlite_path = ena.urls.sqlite
+    connection_string = 'sqlite://' + sqlite_path
 
     def requires(self):
         return SubmitToEna(self.species, self.study_id, self.sample_ids, self.biorep_id,
@@ -163,8 +164,6 @@ class SubmitToEna(luigi.Task):
 
 
 class UploadCramToENA(luigi.Task):
-    """This task retrieves an ftp location, but we can just access the file directly,
-    which saves us from downloading the file before uploading"""
     ftp_location = luigi.Parameter()
 
     def run(self):
