@@ -5,7 +5,7 @@ import requests
 import ena.create_xml as create_xml
 import ena.credentials
 import ena.metadata as metadata
-import ena.urls
+import urls
 
 
 class Response:
@@ -20,9 +20,9 @@ def submit_to_ena(basic: metadata.Basic, references: metadata.References, test: 
     submission_xml = create_xml.create_submission_xml(basic)
     analysis_xml = create_xml.create_analysis_xml(basic, references)
     if test:
-        server = ena.urls.test_server
+        server = urls.test_server
     else:
-        server = ena.urls.production_server
+        server = urls.production_server
     url = '{server}?auth=ena%20{user}%20{password}'.format(server=server, user=ena.credentials.user,
                                                            password=ena.credentials.password)
 

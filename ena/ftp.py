@@ -4,8 +4,8 @@ import os
 import subprocess
 from typing import List
 
+import urls
 from ena import credentials
-from ena import urls
 
 
 def upload_to_ena(path: str):

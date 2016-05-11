@@ -15,7 +15,7 @@ import ena.credentials
 import ena.ftp
 import ena.metadata
 import ena.submit
-import ena.urls
+import urls
 
 
 class EnaTaskException(Exception):
@@ -95,7 +95,7 @@ class StoreEnaSubmissionResult(sqla.CopyToTable):
         (['analysis_acc', String(128)], {})
     ]
     table = 'EnaSubmissionResult'
-    sqlite_path = ena.urls.sqlite
+    sqlite_path = urls.sqlite
     connection_string = 'sqlite://' + sqlite_path
 
     def requires(self):
