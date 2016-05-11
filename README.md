@@ -40,7 +40,7 @@ luigi --module pipeline SubmitAllSpecies
 This will make a request to [getOrganisms](http://www.ebi.ac.uk/fg/rnaseq/api/json/70/getOrganisms/plants) on the ArrayExpress API to fetch a list of all plant species, and run SubmitSpecies (described above) for each.
 
 ## Scaling
-Multiple workers can be run in parallel on the same host by adding the `--workers` parameter. E.g. `luigi --module pipeline SubmitAllSpecies --local-scheduler --workers 8`. Since this pipeline is limited by the throughput of the ArrayExpress and ENA FTP servers, increasing the number of workers beyond this will not improve performance.
+Multiple workers can be run in parallel on the same host by adding the `--workers` parameter. E.g. `luigi --module pipeline SubmitAllSpecies --workers 8`. Since this pipeline is limited by the throughput of the ArrayExpress and ENA FTP servers, increasing the number of workers beyond this will not improve performance.
 
 ## Background
 Every step from discovering CRAM files, over collecting metadata, to submitting to ENA is implemented as a
