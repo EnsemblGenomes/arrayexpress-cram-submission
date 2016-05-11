@@ -12,7 +12,6 @@ class ArrayexpressTest(unittest.TestCase):
 
     def test_get_cram_species(self):
         species = arrayexpress.get_cram_species()
-        print(len(species))
         assert_that(len(species), greater_than(30))
         assert_that(species, has_items('oryza_sativa', 'arabidopsis_thaliana', 'zea_mays'))
 
@@ -38,8 +37,8 @@ class ArrayexpressTest(unittest.TestCase):
         with self.assertRaises(ArrayexpressException):
             arrayexpress.fetch_ftp_cram_md5('spam')
 
-    @unittest.skip('this only works on the internal network of the EBI, '
-                   'with direct access to the file system behind the public ftp site')
+    @unittest.skipIf(os.environ.get('TRAVIS'), 'this only works on the internal network of the EBI, '
+                                               'with direct access to the file system behind the public ftp site')
     def test_get_cram_md5_nfs(self):
         md5 = arrayexpress.fetch_ftp_cram_md5(self.ftp_path, use_nfs=True)
         assert_that(md5, is_('f89bcb043fab48221192d4152b9611ab'))
@@ -63,8 +62,8 @@ class ArrayexpressTest(unittest.TestCase):
         with self.assertRaises(ArrayexpressException):
             arrayexpress.fetch_cram_description('spam')
 
-    @unittest.skip('this only works on the internal network of the EBI, '
-                   'with direct access to the file system behind the ArrayExpress ftp site')
+    @unittest.skipIf(os.environ.get('TRAVIS'), 'this only works on the internal network of the EBI, '
+                                               'with direct access to the file system behind the ArrayExpress ftp site')
     def test_get_cram_description_nfs(self):
         with self.assertRaises(ArrayexpressException):
             arrayexpress.fetch_cram_description('spam', use_nfs=True)
