@@ -71,8 +71,8 @@ class EnaTest(unittest.TestCase):
         time.sleep(5)
         assert_that(ena.ftp.is_present(filename), is_(False))
 
-    @unittest.skip('the aspera client is only distributed as deb or rpm package,'
-                   'tricky to install on a host without root')
+    @unittest.skipIf(os.environ.get('TRAVIS'), 'the aspera client is only distributed as deb or rpm package,'
+                                               'tricky to install on a travis without root')
     def test_ftp_upload_aspera(self):
         ena.ftp.upload_to_ena_aspera(self.cram_path)
         filename = os.path.basename(self.cram_path)
