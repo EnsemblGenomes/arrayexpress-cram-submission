@@ -12,14 +12,14 @@ def _raise_exception(name: str):
 
 config = configparser.ConfigParser()
 config.read(os.path.join(os.path.dirname(__file__), '..', 'ena-urls.cfg'))
-test_server = config['submission']['test']
+test_server = config['ENA submission']['test']
 if not test_server:
-    _raise_exception('submission/test')
+    _raise_exception('ENA submission/test')
 
-production_server = config['submission']['production']
+production_server = config['ENA submission']['production']
 if not production_server:
-    _raise_exception('submission/production')
+    _raise_exception('ENA submission/production')
 
-ftp_server = config['ftp']['host']
+ftp_server = config['ENA ftp']['host']
 if not ftp_server:
-    _raise_exception('ftp/host')
+    _raise_exception('ENA ftp/host')
