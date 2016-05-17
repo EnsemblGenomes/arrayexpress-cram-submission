@@ -7,6 +7,8 @@ from ena import metadata
 
 
 def create_submission_xml(basic: metadata.Basic) -> str:
+    """Create the 'submission' XML document for programmatic submission to ENA, as described here:
+    http://www.ebi.ac.uk/ena/submit/preparing-xmls#submission"""
     submission_set = submission_schema.SubmissionSetType()
     submission = submission_schema.SubmissionType(alias=basic.alias, center_name=basic.center_name,
                                                   broker_name=basic.broker_name)
@@ -23,6 +25,8 @@ def create_submission_xml(basic: metadata.Basic) -> str:
 
 
 def create_analysis_xml(basic: metadata.Basic, ref: metadata.References) -> str:
+    """Create the 'analysis' XML document for programmatic submission to ENA, as described here:
+    http://www.ebi.ac.uk/ena/submit/preparing-xmls#cram_ref_seq_submissions_example"""
     analysis_set = analysis_schema.AnalysisSetType()
     analysis = analysis_schema.AnalysisType(alias=basic.alias, center_name=basic.center_name,
                                             broker_name=basic.broker_name)

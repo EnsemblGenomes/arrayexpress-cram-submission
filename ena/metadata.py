@@ -2,6 +2,8 @@ from typing import List
 
 
 class Basic:
+    """Metadata required for creating the ENA submission and analysis documents."""
+
     def __init__(self, alias: str, center_name: str, broker_name: str,
                  title: str, description: str, ftp_location: str, md5: str):
         self.alias = alias
@@ -14,6 +16,8 @@ class Basic:
 
 
 class References:
+    """Metadata referencing existing objects in ENA, required for creating the ENA submission and analysis documents."""
+
     def __init__(self, study_accession: str, sample_accessions: List[str],
                  assembly_accession: str, run_accessions: List[str]):
         self.study_accession = study_accession

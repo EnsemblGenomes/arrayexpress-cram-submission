@@ -1,3 +1,4 @@
+"""Read URLs from the urls.cfg config file."""
 import configparser
 import os
 

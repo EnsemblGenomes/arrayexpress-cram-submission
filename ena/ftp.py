@@ -9,6 +9,7 @@ from ena import credentials
 
 
 def upload_to_ena(path: str):
+    """Upload path to the ENA 'drop-box' FTP server."""
     session = ftplib.FTP(urls.ftp_server, credentials.user, credentials.password)
     file_name = os.path.basename(path)
     with open(path, 'rb') as f:
@@ -17,6 +18,7 @@ def upload_to_ena(path: str):
 
 
 def _remove_from_ena(path: str):
+    """Remove path from the ENA 'drop-box' FTP server."""
     session = ftplib.FTP(urls.ftp_server, credentials.user, credentials.password)
     file_name = os.path.basename(path)
     session.delete(file_name)
@@ -24,6 +26,7 @@ def _remove_from_ena(path: str):
 
 
 def upload_to_ena_aspera(path: str):
+    """Upload path to the ENA 'drop-box' using the Aspera Transfer Client."""
     command = 'ascp -QT -l3000M --ignore-host-key {path} {user}@{url}:.'.format(path=path, user=credentials.user,
                                                                                 url=urls.ftp_server)
     env = {'ASPERA_SCP_PASS': credentials.password}
@@ -55,6 +58,7 @@ class _Cache:
 
 
 def _list_dir() -> List[str]:
+    """List the contents of the ENA ftp server in one go."""
     session = ftplib.FTP(urls.ftp_server, credentials.user, credentials.password)
     files = session.nlst()
     session.quit()

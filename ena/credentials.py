@@ -1,3 +1,4 @@
+"""Read ENA username and password from the environment."""
 import os
 
 

@@ -9,6 +9,8 @@ import urls
 
 
 class Response:
+    """Represents the response of ENA on programmatic submission."""
+
     def __init__(self, successful: bool, submission_acc: str, analysis_acc: str, error: str):
         self.successful = successful
         self.submission_acc = submission_acc
@@ -17,6 +19,7 @@ class Response:
 
 
 def submit_to_ena(basic: metadata.Basic, references: metadata.References, test: bool = True) -> Response:
+    """Create the required submission and analysis XML documents and submit them to ENA."""
     submission_xml = create_xml.create_submission_xml(basic)
     analysis_xml = create_xml.create_analysis_xml(basic, references)
     if test:
