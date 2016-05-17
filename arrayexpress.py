@@ -8,6 +8,8 @@ import urls
 
 
 class Cram:
+    """Represents a single arrayexpress CRAM file and its metadata."""
+
     def __init__(self, study_id: str, sample_ids: List[str], biorep_id: str,
                  run_ids: List[str], assembly_used: str, ftp_location: str):
         self.study_id = study_id
@@ -22,12 +24,14 @@ class ArrayexpressException(Exception):
     pass
 
 
-def cram_ftp_to_nfs_path(ftp_location):
+def _cram_ftp_to_nfs_path(ftp_location: str) -> str:
+    """Convert the public FTP server url to an EBI internal file path."""
     return ftp_location.replace('ftp://ftp.ebi.ac.uk/pub/databases/arrayexpress/data/atlas/rnaseq',
                                 '/ebi/ftp/pub/databases/microarray/data/atlas/rnaseq')
 
 
 def get_cram_species() -> List[str]:
+    """Collect a list of all plant species form the arrayexpress rest endpoint."""
     r = requests.get(urls.arrayexpress + '/getOrganisms/plants')
     species_set = set(group['REFERENCE_ORGANISM'] for group in r.json())
     species = sorted(species_set)
@@ -35,6 +39,7 @@ def get_cram_species() -> List[str]:
 
 
 def get_cram_metadata(species: str) -> List[Cram]:
+    """Collect a list of all CRAM files and their metadata from the arrayexpress rest endpoint."""
     r = requests.get(urls.arrayexpress + '/getRunsByOrganism/' + species)
     meta_list = []
     for group in r.json():
@@ -48,10 +53,11 @@ def get_cram_metadata(species: str) -> List[Cram]:
 
 
 def fetch_ftp_cram_md5(ftp_path: str, use_nfs: bool = False) -> str:
+    """Fetch the CRAM MD5 checksum from the arrayexpress FTP server."""
     md5_path = ftp_path + '.md5'
     try:
         if use_nfs:
-            nfs_path = cram_ftp_to_nfs_path(md5_path)
+            nfs_path = _cram_ftp_to_nfs_path(md5_path)
             response = open(nfs_path).read()
         else:
             response = urllib.request.urlopen(md5_path).read().decode()
@@ -62,11 +68,12 @@ def fetch_ftp_cram_md5(ftp_path: str, use_nfs: bool = False) -> str:
 
 
 def fetch_cram_description(ftp_path: str, use_nfs: bool = False) -> str:
+    """Fetch the CRAM pipeline description from the arrayexpress FTP server."""
     cram = ftp_path.split('/')[-1]
     path = ftp_path.replace(cram, 'irap.versions.tsv')
     try:
         if use_nfs:
-            nfs_path = cram_ftp_to_nfs_path(path)
+            nfs_path = _cram_ftp_to_nfs_path(path)
             lines = open(nfs_path).readlines()
         else:
             lines = urllib.request.urlopen(path).readlines()
@@ -88,6 +95,7 @@ def fetch_cram_description(ftp_path: str, use_nfs: bool = False) -> str:
 
 
 def get_ena_analysis_id(submission_id: str) -> str:
+    """Fetch the submission id for an existing analysis id from the ENA rest endpoint."""
     r = requests.get('http://www.ebi.ac.uk/ena/data/view/%s&display=xml' % submission_id)
     if 'entry is not found' in r.text:
         raise ArrayexpressException("couldn't find analysis id for submission id " + submission_id)
