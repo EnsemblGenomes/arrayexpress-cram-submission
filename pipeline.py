@@ -23,6 +23,7 @@ class EnaTaskException(Exception):
 
 
 class SubmitAllSpecies(luigi.Task):
+    """Spawns a SubmitSpecies task for every plant species."""
     limit = luigi.IntParameter(default=0)
 
     def run(self):
@@ -33,6 +34,7 @@ class SubmitAllSpecies(luigi.Task):
 
 
 class SubmitSpecies(luigi.Task):
+    """Submit all CRAM files for species to ENA."""
     species = luigi.Parameter()
     limit = luigi.IntParameter(default=0)
     test = luigi.BoolParameter(default=False)
@@ -57,6 +59,7 @@ class SubmitSpecies(luigi.Task):
 
 
 class ListCrams(luigi.Task):
+    """Query arrayexpress for a list of all CRAM files for species."""
     species = luigi.Parameter()
     resources = {'arrayexpress_rest_api': 1}
 
@@ -77,6 +80,7 @@ def _json_pickle(x) -> str:
 
 
 class StoreEnaSubmissionResult(sqla.CopyToTable):
+    """Store the outcome of submission to ENA in an SQLite database."""
     species = luigi.Parameter()
     study_id = luigi.Parameter()
     sample_ids = luigi.Parameter()
@@ -110,6 +114,7 @@ class StoreEnaSubmissionResult(sqla.CopyToTable):
 
 
 class SubmitToEna(luigi.Task):
+    """Submit the CRAM file under ftp_location to ENA and output the outcome."""
     species = luigi.Parameter()
     study_id = luigi.Parameter()
     sample_ids = luigi.Parameter()
@@ -118,6 +123,8 @@ class SubmitToEna(luigi.Task):
     assembly_used = luigi.Parameter()
     ftp_location = luigi.Parameter()
     test = luigi.BoolParameter()
+
+    resources = {'ena_submission_endpoint': 1}
 
     def requires(self):
         return UploadCramToENA(self.ftp_location)
@@ -164,6 +171,7 @@ class SubmitToEna(luigi.Task):
 
 
 class UploadCramToENA(luigi.Task):
+    """Upload CRAM file under ftp_location to ENA."""
     ftp_location = luigi.Parameter()
 
     def run(self):
