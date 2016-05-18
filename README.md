@@ -52,7 +52,7 @@ luigi --module pipeline SubmitAllSpecies
 
 #### Docker
 ```bash
-sudo docker run \
+docker run \
 	-e "ena_user=webin-xxx" \
 	-e "ena_password=xxxxxxxx" \
 	<image> SubmitAllSpecies
