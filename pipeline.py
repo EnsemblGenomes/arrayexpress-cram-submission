@@ -100,7 +100,9 @@ class StoreEnaSubmissionResult(sqla.CopyToTable):
     ]
     table = 'EnaSubmissionResult'
     sqlite_path = urls.sqlite
-    connection_string = 'sqlite://' + sqlite_path
+    connection_string = 'sqlite://'  # in-memory database
+    if sqlite_path:
+        connection_string += '/' + sqlite_path
 
     def requires(self):
         return SubmitToEna(self.species, self.study_id, self.sample_ids, self.biorep_id,
