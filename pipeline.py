@@ -163,7 +163,7 @@ class SubmitToEna(luigi.Task):
             run_ids_string = ', '.join(id_ for id_ in self.run_ids)
         title = 'Alignment of %s to %s' % (run_ids_string, self.assembly_used)
         alias = self.biorep_id + '_cram'
-        basic = ena.metadata.Basic(alias, 'EMBL-EBI - United Kingdom', 'ENSEMBL GENOMES',
+        basic = ena.metadata.Basic(alias, 'EBI', 'ENSEMBL GENOMES',
                                    title, description, self.ftp_location, remote_md5)
         # convert parameters back to list
         self.sample_ids = ast.literal_eval(self.sample_ids)
