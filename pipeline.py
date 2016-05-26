@@ -48,9 +48,11 @@ class SubmitSpecies(luigi.Task):
         if self.limit != 0:
             cram_list = cram_list[:self.limit]
 
+        tasks = []
         for c in cram_list:
-            yield StoreEnaSubmissionResult(self.species, c.study_id, c.sample_ids, c.biorep_id,
-                                           c.run_ids, c.assembly_used, c.ftp_location, self.test)
+            tasks.append(StoreEnaSubmissionResult(self.species, c.study_id, c.sample_ids, c.biorep_id,
+                                                  c.run_ids, c.assembly_used, c.ftp_location, self.test))
+        yield tasks
         with self.output().open('w') as out_file:
             out_file.write('done')
 
