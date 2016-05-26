@@ -2,6 +2,7 @@ import datetime
 import ftplib
 import os
 import subprocess
+import urllib.request
 from typing import List
 
 import urls
@@ -10,11 +11,15 @@ from ena import credentials
 
 def upload_to_ena(path: str):
     """Upload path to the ENA 'drop-box' FTP server."""
+    if path.startswith('ftp://'):
+        source = urllib.request.urlopen(path)
+    else:
+        source = open(path, 'rb')
     session = ftplib.FTP(urls.ftp_server, credentials.user, credentials.password)
     file_name = os.path.basename(path)
-    with open(path, 'rb') as f:
-        session.storbinary('STOR ' + file_name, f)
+    session.storbinary('STOR ' + file_name, source)
     session.quit()
+    source.close()
 
 
 def _remove_from_ena(path: str):

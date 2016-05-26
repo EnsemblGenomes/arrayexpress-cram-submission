@@ -71,6 +71,17 @@ class EnaTest(unittest.TestCase):
         time.sleep(5)
         assert_that(ena.ftp.is_present(filename), is_(False))
 
+    def test_ftp_upload_from_ftp(self):
+        path = 'ftp://ftp.ebi.ac.uk/pub/databases/arrayexpress/data/atlas/rnaseq/DRR001/DRR001626/DRR001626.cram'
+        filename = path.split('/')[-1]
+        ena.ftp.upload_to_ena(path)
+        time.sleep(5)
+        assert_that(ena.ftp.is_present(filename), is_(True))
+
+        ena.ftp._remove_from_ena(filename)
+        time.sleep(5)
+        assert_that(ena.ftp.is_present(filename), is_(False))
+
     @unittest.skipIf(os.environ.get('TRAVIS'), 'the aspera client is only distributed as deb or rpm package,'
                                                'tricky to install on a travis without root')
     def test_ftp_upload_aspera(self):
