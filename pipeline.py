@@ -1,4 +1,3 @@
-import ast
 import json
 import os
 from typing import List
@@ -85,9 +84,9 @@ class StoreEnaSubmissionResult(sqla.CopyToTable):
     """Store the outcome of submission to ENA in an SQLite database."""
     species = luigi.Parameter()
     study_id = luigi.Parameter()
-    sample_ids = luigi.Parameter()
+    sample_ids = luigi.ListParameter()
     biorep_id = luigi.Parameter()
-    run_ids = luigi.Parameter()
+    run_ids = luigi.ListParameter()
     assembly_used = luigi.Parameter()
     ftp_location = luigi.Parameter()
     test = luigi.BoolParameter()
@@ -121,9 +120,9 @@ class SubmitToEna(luigi.Task):
     """Submit the CRAM file under ftp_location to ENA and output the outcome."""
     species = luigi.Parameter()
     study_id = luigi.Parameter()
-    sample_ids = luigi.Parameter()
+    sample_ids = luigi.ListParameter()
     biorep_id = luigi.Parameter()
-    run_ids = luigi.Parameter()
+    run_ids = luigi.ListParameter()
     assembly_used = luigi.Parameter()
     ftp_location = luigi.Parameter()
     test = luigi.BoolParameter()
@@ -167,9 +166,6 @@ class SubmitToEna(luigi.Task):
         alias = self.biorep_id + '_cram'
         basic = ena.metadata.Basic(alias, 'EBI', 'ENSEMBL GENOMES',
                                    title, description, self.ftp_location, remote_md5)
-        # convert parameters back to list
-        self.sample_ids = ast.literal_eval(self.sample_ids)
-        self.run_ids = ast.literal_eval(self.run_ids)
         references = ena.metadata.References('ERP014374', self.sample_ids, self.assembly_used, self.run_ids)
         return basic, references
 
