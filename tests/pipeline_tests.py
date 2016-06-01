@@ -22,8 +22,8 @@ class PipelineTest(unittest.TestCase):
         assert_that(has_completed, is_(False))
 
     def test_submit_task(self):
-        task = SubmitToEna(species='oryza_sativa', study_id='DRP000315', sample_ids="['SAMD00009892', 'SAMD00009893']",
-                           biorep_id='E-GEOD-35288', run_ids="['DRR000745', 'DRR000746']", assembly_used='IRGSP-1.0',
+        task = SubmitToEna(species='oryza_sativa', study_id='DRP000315', sample_ids=['SAMD00009892', 'SAMD00009893'],
+                           biorep_id='E-GEOD-35288', run_ids=['DRR000745', 'DRR000746'], assembly_used='IRGSP-1.0',
                            ftp_location='ftp://ftp.ebi.ac.uk/pub/databases/arrayexpress/data/atlas/rnaseq/DRR000/DRR000749/DRR000749.cram',
                            test=True)
         has_completed = luigi.build([task], local_scheduler=True)
