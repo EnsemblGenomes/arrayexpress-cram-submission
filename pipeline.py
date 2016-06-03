@@ -1,3 +1,4 @@
+import datetime
 import json
 import os
 from typing import List
@@ -163,7 +164,7 @@ class SubmitToEna(luigi.Task):
         else:
             run_ids_string = ', '.join(id_ for id_ in self.run_ids)
         title = 'Alignment of %s to %s' % (run_ids_string, self.assembly_used)
-        alias = self.biorep_id + '_cram'
+        alias = self.biorep_id + '_cram_' + datetime.datetime.now().strftime('%Y-%m-%d')
         basic = ena.metadata.Basic(alias, 'EBI', 'ENSEMBL GENOMES',
                                    title, description, self.ftp_location, remote_md5)
         references = ena.metadata.References('ERP014374', self.sample_ids, self.assembly_used, self.run_ids)
