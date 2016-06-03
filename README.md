@@ -15,7 +15,8 @@ Start the [central scheduler](http://luigi.readthedocs.io/en/stable/central_sche
 ```bash
 luigid
 ```
-and visit it on port 8082, e.g. <http://localhost:8082>. Then run a pipeline and follow the progress in your browser.
+and visit it on port 8082, e.g. <http://localhost:8082>. Then run a pipeline and follow the progress in your browser. 
+The localhost needs to be the name of the local (or farm) server you are working on.
 
 ## Submitting all CRAM files for a species
 #### Bash
