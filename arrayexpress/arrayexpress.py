@@ -47,7 +47,7 @@ def get_cram_metadata(species: str) -> List[Cram]:
             run_ids = group['RUN_IDS'].split(',')
             sample_ids = group['SAMPLE_IDS'].split(',')
             meta = Cram(group['STUDY_ID'], sample_ids, group['BIOREP_ID'], run_ids,
-                        group['ASSEMBLY_USED'], group['FTP_LOCATION'])
+                        group['ASSEMBLY_USED'], group['CRAM_LOCATION'])
             meta_list.append(meta)
     return meta_list
 
