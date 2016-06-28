@@ -80,3 +80,36 @@ Should the schemas change, a new version of the API can be generated with
 generateDS.py -o "SRA_analysis.py" -s "SRA_analysis_sub.py" SRA.analysis.xsd
 generateDS.py -o "SRA_submission.py" -s "SRA_submission_sub.py" SRA.submission.xsd
 ```
+
+## Execution Summary
+Luigi will print a summary of all work that has been done. Here's simplified example:
+```
+===== Luigi Execution Summary =====
+Scheduled 40132 tasks of which:
+* 7923 present dependencies were encountered:
+    - 7918 StoreEnaSubmissionResult(...)
+* 32186 ran successfully:
+    - 10705 StoreEnaSubmissionResult(...)
+    - 36 SubmitSpecies(species=aegilops_tauschii) ...
+    - 10705 SubmitToEna(...)
+    - 10702 UploadCramToENA(...)
+* 11 failed:
+    - 8 SubmitToEna(...)
+    - 3 UploadCramToENA(...)
+* 3 were left pending, among these:
+    * 3 were missing external dependencies:
+        - 1 SubmitAllSpecies(limit=0)
+        - 2 SubmitSpecies(species=oryza_sativa) and SubmitSpecies(species=zea_mays)
+```
+**present dependency** means the task has completed successfully on a previous run of luigi.
+_StoreEnaSubmissionResult_ is the task that stores accessions returned from ENA in SQLite. So this section tells us that 7918 files have been submitted before.
+
+**ran successfully** means the task completed successfully just now.
+So we can see that 10705 files have been submitted, and 36 species have been processed fully.
+
+**failed** means just that - errors are in the log or the scheduler web interface.
+8 files couldn't be submitted to the ENA rest endpoint. 3 files couldn't be uploaded to the ENA ftp server.
+
+These failures cause problems upstream for tasks that depend on them, which are described after that. We can see that _oryza_sativa_ and _zea_mays_ were affected by the submission and upload failures.
+
+The good news is that 32186 tasks ran successfully and won't be run again in the future, only the 11 failed ones.
